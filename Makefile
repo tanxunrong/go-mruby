@@ -13,8 +13,8 @@ libmruby.a: vendor/mruby
 
 vendor/mruby:
 	mkdir -p vendor
-	git clone https://github.com/mruby/mruby.git vendor/mruby
-	cd vendor/mruby && git reset --hard && git clean -fdx
-	cd vendor/mruby && git checkout ${MRUBY_COMMIT}
+	git clone --depth=1 https://github.com/mruby/mruby.git vendor/mruby
+	#cd vendor/mruby && git reset --hard && git clean -fdx
+	#cd vendor/mruby && git checkout ${MRUBY_COMMIT}
 
 .PHONY: all clean libmruby.a test
