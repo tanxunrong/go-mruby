@@ -77,3 +77,13 @@ func TestClassValue(t *testing.T) {
 		t.Fatalf("bad: %d", value.Type())
 	}
 }
+
+func TestClassName(t *testing.T) {
+	mrb := NewMrb()
+	defer mrb.Close()
+
+	class := mrb.DefineClass("Hello", mrb.ObjectClass())
+	if name,_ := class.Name() ; name != "Hello" {
+		t.Fatalf("err: hello class'name -> %s",name)
+	}
+}

@@ -80,6 +80,13 @@ func (c *Class) New(args ...Value) (*MrbValue, error) {
 	return newValue(c.mrb.state, result), nil
 }
 
+// class's name
+func (c *Class) Name() (string,error) {
+	var name *C.char = C.mrb_class_name(c.mrb.state,c.class)
+	n := C.GoString(name)
+	return n,nil
+}
+
 func newClass(mrb *Mrb, c *C.struct_RClass) *Class {
 	return &Class{
 		class: c,
