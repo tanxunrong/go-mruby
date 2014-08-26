@@ -274,6 +274,11 @@ func (m *Mrb) DefineModuleUnder(name string, outer *Class) *Class {
 		C.mrb_define_module_under(m.state, outer.class, cs))
 }
 
+// IncludeModule class include module
+func (m *Mrb) IncludeModule(clz *Class,mod *Class) {
+	C.mrb_include_module(m.state,clz.class,mod.class)
+}
+
 //-------------------------------------------------------------------
 // Functions below return Values or constant Classes
 //-------------------------------------------------------------------

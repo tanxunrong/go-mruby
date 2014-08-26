@@ -326,3 +326,23 @@ func TestMrbYield(t *testing.T) {
 		t.Fatalf("bad: %s", value)
 	}
 }
+
+func TestMrbInclude(t *testing.T) {
+	mrb := NewMrb()
+	defer mrb.Close()
+
+	mod := mrb.DefineModuleUnder("Skynet",nil)
+	clz := mrb.DefineClass("Leela",nil)
+
+	mrb.IncludeModule(clz,mod)
+	value,err := mrb.LoadString(`Leela.include? Skynet`)
+
+	if err != nil {
+		t.Fatalf("include fail,err: %s", err)
+	}
+
+	if value.Type() != TypeTrue {
+		t.Fatalf("include? return not TRUE,bad: %s", value)
+	}
+
+}
