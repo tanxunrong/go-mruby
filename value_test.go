@@ -22,6 +22,48 @@ func TestMrbValueCall(t *testing.T) {
 	}
 }
 
+func TestMrbValueEq(t *testing.T) {
+	mrb := NewMrb()
+	defer mrb.Close()
+
+	v1 := mrb.FixnumValue(1)
+	v2 := mrb.FixnumValue(1)
+
+	if v1.Eq(v2) == false {
+		t.Fatalf("v1.eq(v2) return false")
+	}
+}
+
+func TestMrbValueEqual(t *testing.T) {
+	mrb := NewMrb()
+	defer mrb.Close()
+
+	v1 := mrb.FixnumValue(1)
+	v2 := mrb.FixnumValue(1)
+
+	if v1.Equal(v2) == false {
+		t.Fatalf("v1.equal(v2) return false")
+	}
+
+	arrClz := mrb.Class("Array",nil)
+	va,_ := arrClz.New()
+	vb,_ := arrClz.New()
+
+	var err error
+	va,err = va.Call("push",v1,v2)
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
+	vb,err = vb.Call("push",v1,v2)
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
+
+	if va.Equal(vb) == false {
+		t.Fatalf("va.equal(vb) return false")
+	}
+}
+
 func TestMrbValueValue(t *testing.T) {
 	mrb := NewMrb()
 	defer mrb.Close()

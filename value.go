@@ -96,6 +96,32 @@ func (v *MrbValue) Call(method string, args ...Value) (*MrbValue, error) {
 	return newValue(v.state, result), nil
 }
 
+// Eq return v.eq(v2)
+func (v *MrbValue) Eq(v2 *MrbValue) bool {
+	if v.state != v2.state {
+		panic("not same mrb_state");
+	}
+	var eq C.mrb_bool
+	eq = C.mrb_obj_eq(v.state,v.value,v2.value)
+	if eq == 0 {
+		return false
+	}
+	return true;
+}
+
+// Equal return v.equal(v2)
+func (v *MrbValue) Equal(v2 *MrbValue) bool {
+	if v.state != v2.state {
+		panic("not same mrb_state");
+	}
+	var eq C.mrb_bool
+	eq = C.mrb_obj_equal(v.state,v.value,v2.value)
+	if eq == 0 {
+		return false
+	}
+	return true;
+}
+
 // IsDead tells you if an object has been collected by the GC or not.
 func (v *MrbValue) IsDead() bool {
 	return C._go_mrb_is_dead(v.state, v.value) != 0
