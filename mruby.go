@@ -80,6 +80,19 @@ func (m *Mrb) Class(name string, super *Class) *Class {
 	return newClass(m, class)
 }
 
+// Module return Module by name,super can be nil
+func (m *Mrb) Module(name string , super *Class) *Class {
+	cs := C.CString(name)
+	defer C.free(unsafe.Pointer(cs))
+	var class *C.struct_RClass
+	if super == nil {
+		class = C.mrb_module_get(m.state,cs)
+	} else {
+		class = C.mrb_module_get_under(m.state,super.class,cs)
+	}
+	return newClass(m,class)
+}
+
 // Close a Mrb, this must be called to properly free resources, and
 // should only be called once.
 func (m *Mrb) Close() {

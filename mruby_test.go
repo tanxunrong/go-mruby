@@ -36,6 +36,17 @@ func TestMrbClass(t *testing.T) {
 	}
 }
 
+func TestMrbModule(t *testing.T) {
+	mrb := NewMrb()
+	defer mrb.Close()
+
+	var mod *Class
+	mod = mrb.Module("Kernel", nil)
+	if mod == nil {
+		t.Fatal("mod should not be nil")
+	}
+}
+
 func TestMrbConstDefined(t *testing.T) {
 	mrb := NewMrb()
 	defer mrb.Close()
