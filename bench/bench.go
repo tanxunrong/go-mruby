@@ -6,26 +6,27 @@ import (
 	"sync/atomic"
 	"runtime/pprof"
 	"os"
+	"flag"
 )
 
 var total int32 = 0
 var cl chan int
+var num = flag.Int("n",1000,"bench func call num")
 
 func bench() {
-		fmt.Println("bench start")
 		mrb := mruby.NewMrb()
 		clz := mrb.DefineClass("Skynet",nil)
 		inst,_ := clz.New()
 		inst.Call("inspect")
 		mrb.Close()
 		atomic.AddInt32(&total,1)
-		if total >= 99 {
+		if total >= int32(*num) {
 			cl <- 1
 		}
-		fmt.Println("bench end")
 }
 
 func main() {
+	flag.Parse()
 	var f *os.File
 	f,_ = os.Create("pprof.log")
 	pprof.StartCPUProfile(f)
@@ -37,7 +38,7 @@ func main() {
 	defer f2.Close()
 
 	cl = make(chan int)
-	for i:=1;i<100;i++ {
+	for i:=0;i<*num;i++ {
 		go bench()
 	}
 	<-cl
